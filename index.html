@@ -7,19 +7,53 @@
 </head>
 <body>
     <script>
+        // global variables
+        let pScore = 0;
+        let cScore = 0;
+
         function getComputerChoice() {
             const choice = Math.random();
 
             if (choice < 0.34) {
-                return "Rock";
+                return "rock";
             } else if (choice < 0.67) {
-                return "Paper";
+                return "paper";
             } else {
-                return "Scissors";
+                return "scissors";
             }
         }
 
-        console.log(getComputerChoice());
+        function playRound(playerChoice, computerChoice) {
+            playerChoice = playerChoice.toLowerCase();
+
+            if (playerChoice === computerChoice) {
+                return "It's a tie!";
+            } else if (playerChoice === "rock" && computerChoice === "scissors" ||
+                        playerChoice === "scissors" && computerChoice === "paper" || 
+                        playerChoice === "paper" && computerChoice === "rock") {
+
+                pScore++;
+                return "You win! " + playerChoice + " beats " + computerChoice + "!";
+            } else {
+                cScore++;
+                return "You lose! " + computerChoice + " beats " + playerChoice + "!";
+            }
+        }
+
+        // game loop
+
+        function game() {
+
+            for (let i = 0; i < 5; ++i) {
+                console.log(playRound(prompt("Rock, paper, or scissors?"), getComputerChoice()));
+            }
+
+            console.log("Player: " + pScore);
+            console.log("Computer: " + cScore);
+            (pScore > cScore) ? console.log("Player wins!") : console.log("Computer wins!");
+        }
+
+        game();
     </script>
 </body>
 </html>
