@@ -4,8 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Paper Scissors</title>
+    <style>
+        #scoreboard {
+            display: flex;
+        }
+
+        #scoreboard ul {
+            list-style-type: none;
+        }
+    </style>
 </head>
 <body>
+    <button id="rock">ROCK</button>
+    <button id="paper">PAPER</button>
+    <button id="scissors">SCISSORS</button>
+    <div id="scoreboard">
+        <ul>
+            <li><strong>PLAYER</strong></li>
+            <li id="playerScore"></li>
+        </ul>
+        <ul>
+            <li><strong>COMPUTER</strong></li>
+            <li id="computerScore"></li>
+        </ul>
+    </div>
+    <p id="announcer"></p>
+
     <script>
         // global variables
         let pScore = 0;
@@ -26,31 +50,55 @@
         function playRound(playerChoice, computerChoice) {
             playerChoice = playerChoice.toLowerCase();
 
+            const msg = document.querySelector('#announcer');
+
             if (playerChoice === computerChoice) {
-                return "It's a tie!";
+                msg.textContent = "It's a tie!";
             } else if (playerChoice === "rock" && computerChoice === "scissors" ||
                         playerChoice === "scissors" && computerChoice === "paper" || 
                         playerChoice === "paper" && computerChoice === "rock") {
 
                 pScore++;
-                return "You win! " + playerChoice + " beats " + computerChoice + "!";
+                msg.textContent = "You win! " + playerChoice + " beats " + computerChoice + "!";
+                document.querySelector('#playerScore').textContent = pScore;
             } else {
                 cScore++;
-                return "You lose! " + computerChoice + " beats " + playerChoice + "!";
+                msg.textContent = "You lose! " + computerChoice + " beats " + playerChoice + "!";
+                document.querySelector('#computerScore').textContent = cScore;
             }
+
+            if (pScore === 5 || cScore === 5) {
+                if (pScore === 5) {
+                    msg.textContent = "Congratulations! YOU WIN!";
+                } else if (cScore === 5) {
+                    msg.textContent = "Condolences, you lose....";
+                }
+
+                pScore = 0;
+                cScore = 0;
+                document.querySelector('#playerScore').textContent = pScore;
+                document.querySelector('#computerScore').textContent = cScore;
+
+            }
+            
         }
 
         // game loop
 
         function game() {
 
-            for (let i = 0; i < 5; ++i) {
-                console.log(playRound(prompt("Rock, paper, or scissors?"), getComputerChoice()));
-            }
 
-            console.log("Player: " + pScore);
-            console.log("Computer: " + cScore);
-            (pScore > cScore) ? console.log("Player wins!") : console.log("Computer wins!");
+            const scoreBoard = document.createElement('div');
+            document.body.appendChild(scoreBoard);
+
+            const choices = document.querySelectorAll('button');
+
+            choices.forEach((choice) => {
+                choice.addEventListener('click', () => {
+                    playRound(choice.textContent, getComputerChoice());
+                });
+            });
+
         }
 
         game();
